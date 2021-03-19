@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Cancer Detection</title>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Cancer Detection</h1>
+      <div style="padding-top: 16px">
+        <label for="file" style="padding-right: 16px"> Select a file: </label>
+        <input
+          type="file"
+          id="file"
+          name="file"
+          accept="image/png, image/jpeg"
+        />
+      </div>
+      <div style="padding-top: 16px">
+        <img src="" id="image" style="max-width: 60%" />
+      </div>
+      <div id="button" style="padding-top: 16px" hidden>
+        <button type="button" class="button">Submit</button>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script>
+  var file = document.getElementById("file");
+  var image = document.getElementById("image");
+  var button = document.getElementById("button");
+
+  file.addEventListener("change", function () {
+    if (file.files.length > 0) {
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        image.src = e.target.result;
+      };
+      reader.readAsDataURL(file.files[0]);
+      button.style.display = "block";
+    } else {
+      button.style.display = "none";
+    }
+  });
+</script>
+
+<style>
+  #app {
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    margin-top: 5%;
+  }
+
+  .button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    background-color: #1b73d8;
+    border-radius: 5px;
+  }
+</style>
