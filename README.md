@@ -3,5 +3,5 @@
 # install dependencies
 pip install -r requirements.txt
 
-# serve running on localhost:5000
-python main.py
+# serve running on http://127.0.0.1:5000/
+flask run
