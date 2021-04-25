@@ -17,10 +17,14 @@
         />
       </div>
       <div style="padding-top: 16px">
-        <img src="" id="image" style="max-width: 60%" />
+        <span style="width: 40%">
+          <img src="" id="image" style="max-height: 400px" />
+        </span>
       </div>
-      <div id="button" style="padding-top: 16px" hidden>
-        <button type="button" class="button">Submit</button>
+      <div id="button" style="padding-top: 16px">
+        <button type="button" class="button" onclick="segmentation()">
+          Submit
+        </button>
       </div>
     </div>
   </body>
@@ -31,18 +35,25 @@
   var image = document.getElementById("image");
   var button = document.getElementById("button");
 
-  file.addEventListener("change", function () {
+  file.addEventListener("change", async function () {
     if (file.files.length > 0) {
       var reader = new FileReader();
       reader.onload = function (e) {
         image.src = e.target.result;
       };
       reader.readAsDataURL(file.files[0]);
-      button.style.display = "block";
-    } else {
-      button.style.display = "none";
     }
   });
+
+  async function segmentation() {
+    const formData = new FormData();
+    formData.append("file", file.files[0]);
+    const response = await fetch("/seg", {
+      method: "POST",
+      body: formData,
+    });
+    image.src = await response.text();
+  }
 </script>
 
 <style>

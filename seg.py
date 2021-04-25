@@ -102,7 +102,7 @@ def run_seg(image_path):
     metrics = [dice_coef, Recall(), Precision()]
     modelGo.compile(loss=dice_loss, optimizer=opt, metrics=metrics)
 
-    imgfolderpath = './img/'
+    imgfolderpath = './static/'
     x = read_image(image_path)
     y_pred = modelGo.predict(np.expand_dims(x, axis=0))[0] > 0.5
     h, w, _ = x.shape
