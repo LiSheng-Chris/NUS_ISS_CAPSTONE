@@ -104,7 +104,7 @@ def run_seg(image_path):
 
     imgfolderpath = './static/'
     x = read_image(image_path)
-    y_pred = modelGo.predict(np.expand_dims(x, axis=0))[0] > 0.5
+    y_pred = modelGo.predict(np.expand_dims(x, axis=0))[0]
     h, w, _ = x.shape
     white_line = np.ones((h, 10, 3))
 
