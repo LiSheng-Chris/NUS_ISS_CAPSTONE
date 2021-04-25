@@ -26,6 +26,9 @@
           Submit
         </button>
       </div>
+      <div id="loader" style="padding-left: 48%; padding-top: 16px" hidden>
+        <div class="loader"></div>
+      </div>
     </div>
   </body>
 </html>
@@ -34,6 +37,7 @@
   var file = document.getElementById("file");
   var image = document.getElementById("image");
   var button = document.getElementById("button");
+  var loader = document.getElementById("loader");
 
   file.addEventListener("change", async function () {
     if (file.files.length > 0) {
@@ -46,6 +50,8 @@
   });
 
   async function segmentation() {
+    button.style.display = "none";
+    loader.style.display = "block";
     const formData = new FormData();
     formData.append("file", file.files[0]);
     const response = await fetch("/seg", {
@@ -53,6 +59,8 @@
       body: formData,
     });
     image.src = await response.text();
+    loader.style.display = "none";
+    button.style.display = "block";
   }
 </script>
 
@@ -78,5 +86,23 @@
     cursor: pointer;
     background-color: #1b73d8;
     border-radius: 5px;
+  }
+
+  .loader {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 2s linear infinite;
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 </style>
