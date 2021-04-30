@@ -117,6 +117,7 @@ def run_seg(image_path):
     image_name = os.path.splitext(os.path.basename(image_path))[0]
     image_seg_path  = imgfolderpath+image_name+'_seg.png'
 
+    plt.switch_backend('Agg') 
     fig = plt.figure(figsize=(12, 12))
     a = fig.add_subplot(1, 1, 1)
     imgplot = plt.imshow(image_seg)
