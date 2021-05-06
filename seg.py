@@ -87,7 +87,6 @@ def dice_loss(y_true, y_pred):
     return 1.0 - dice_coef(y_true, y_pred)
 
 def run_seg(image_path):
-
     modelname= 'Unet'
     modelpath      = './model/'
     filepath        = modelpath + modelname + ".hdf5"                 

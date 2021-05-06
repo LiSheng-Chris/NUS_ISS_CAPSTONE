@@ -7,6 +7,10 @@
   <body class="bg">
     <div id="app">
       <h1>Cancer Detection</h1>
+	  <div style="padding-top: 16px">
+	   <label style="padding-right: 16px"> Select segmentation result: </label>
+       <input type="radio" id="rgb" name="maskcolor" value="rgb" checked="checked" ><label for="rgb">RGB</label><input type="radio" id="grayscale" name="maskcolor" value="grayscale"><label for="grayscale">Grayscale</label><br>
+      </div>
       <div style="padding-top: 16px">
         <label for="file" style="padding-right: 16px"> Select a file: </label>
         <input
@@ -38,6 +42,7 @@
   var image = document.getElementById("image");
   var button = document.getElementById("button");
   var loader = document.getElementById("loader");
+  var maskcolor = document.getElementsByName("maskcolor");
 
   file.addEventListener("change", async function () {
     if (file.files.length > 0) {
@@ -52,8 +57,20 @@
   async function segmentation() {
     button.style.display = "none";
     loader.style.display = "block";
+	
     const formData = new FormData();
     formData.append("file", file.files[0]);
+	for (var i = 0, length = maskcolor.length; i < length; i++) {
+	
+		if (maskcolor[i].checked) {
+		// do whatever you want with the checked radio
+		formData.append("maskcolor", maskcolor[i].value)
+		// only one radio can be logically checked, don't check the rest
+		break;
+	}
+  }
+	
+	
     const response = await fetch("/seg", {
       method: "POST",
       body: formData,

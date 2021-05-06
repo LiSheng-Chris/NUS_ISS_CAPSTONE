@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import seg as s
+import seg_color as s_color
 
 app = Flask(__name__)
 
@@ -17,8 +18,12 @@ def world():
 @app.route("/seg", methods=['POST', 'GET'])
 def seg():
     f = request.files['file']
+    mask_color = request.form['maskcolor']
     f.save('./static/' + f.filename)
-    seg_file = s.run_seg('./static/' + f.filename)
+    if mask_color=='rgb':
+        seg_file = s_color.run_seg('./static/' + f.filename)
+    else:
+        seg_file = s.run_seg('./static/' + f.filename)
     return seg_file
 
 
