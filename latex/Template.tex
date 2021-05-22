@@ -66,63 +66,21 @@ of how it works. Even you use pre-trained model in some modules, provide a descr
 You should also give details about what (hyper)parameters you chose and how
 you chose them. What your primary metrics are: accuracy, precision, etc. Provide equations for the metrics if necessary. You also need to evaluate your approach in various experimental setups. For results, you want to have a mixture of tables and plots. To reiterate, you must have both quantitative and qualitative results! Include visualizations of results, examples of where your approach failed and a discussion of why certain approach failed or succeeded. 
 
-Some Latex examples are provided as follows. An inline equation is $a+b=c$. An example of one-column figure is provided in Figure \ref{figure1}.
 
-\begin{equation}\label{equation block model}
-B_{r,c}=\sum\{f(i,j)|(i,j)\in \Omega_{r,c}\}.
-\end{equation}
-\begin{equation}\label{equation 1}
-\sum_{x}=a+b+\hat{c},
-\end{equation}
-
-\begin{figure}[tbh]
-    \centerline{\begin{tabular}{cc|c}
-        \includegraphics[width=3cm]{iss.png}
-        &\includegraphics[width=3cm]{iss.png}& text\\
-    (a) & (b) & (c)
-    \end{tabular}}
-    \caption{Test figure (single column).\label{figure1}}
-\end{figure}
-
-\begin{table}[tbh]
-\caption{The performance comparison.}\label{table1} \centerline{
-    \begin{tabular}{clc|r}
-    \hline\hline
-    Approach & Ref. \cite{He:16CVPR} & Ref. \cite{Nguyen:18IET} & Proposed approach\\
-    Metric A & $0.8181$ & $0.9171$ & $0.9616$ \\\hline
-    Metric B & $0.8236$ & $0.7654$ & $0.8615$ \\\hline
-    \end{tabular}
-    }
-\end{table}
-
-\subsection{DeeplabV3 Model Evaluation}
-trained DeeplabV3 with cityscapes dataset on resnet v2 
-but we were not able to complete due to low computation power.
-\begin{table}[tbh]
-\caption{The (hyper)parameters}\label{table2} \centerline{
-    \begin{tabular}{clc}
-    \hline\hline
-    train epochs & 26 \\\hline
-    batch size & 10 \\\hline
-    decay & 2e-4 \\\hline
-    max iteration & 30000 \\\hline
-    initial learning rate & 7e-3 \\\hline
-    \end{tabular}
-    }
-\end{table}
-
+Find the result in Figure \ref{figure1}
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
         \includegraphics[width=8cm]{resnet_V2_101.png}\\
-    (a)
     \end{tabular}}
-    \caption{deeplabV3 on cityscapes dataset \label{figure2}}
+    \caption{deeplabV3 on cityscapes dataset \label{figure1}}
 \end{figure}
 
 \subsection{Approach 1: Unet segmentation with MobileNetV2}
+Inference speed is big concern due to low computation power, so MobileNetV2 is chosen and input images are resized to 256*256
 
+Find the (hyper)parameters in table \ref{table2}
 \begin{table}[tbh]
-\caption{The (hyper)parameters}\label{table3} \centerline{
+\caption{The (hyper)parameters}\label{table2} \centerline{
     \begin{tabular}{clc}
     \hline\hline
     train epochs & 36 \\\hline
@@ -131,22 +89,25 @@ but we were not able to complete due to low computation power.
     \end{tabular}
     }
 \end{table}
-Dice coefficient is used as loss function
-\begin{equation}\label{equation 3}
-Dice Loss=1-\frac{2\sum_{pixels}(y_{true}*y_{pred})}{\sum_{pixels}(y_{true})+\sum_{pixels}(y_{pred})}.
+
+Dice coefficient works well on imbalanced data, so used as loss function in Equation \ref{equation 1}
+\begin{equation}\label{equation 1}
+Dice Loss=1-\frac{2\sum_{pixels}(y_{true}*y_{pred})}{\sum_{pixels}(y_{true})+\sum_{pixels}(y_{pred})}
 \end{equation}
 
+Find the result in Figure \ref{figure2}
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
         \includegraphics[width=4cm]{unet_grayscale_train_test.png}
         &\includegraphics[width=4cm]{unet_grayscale.JPG}\\
     (a) & (b)
     \end{tabular}}
-    \caption{Unet segmentation with MobileNetV2 \label{figure3}}
+    \caption{Unet segmentation with MobileNetV2 \label{figure2}}
 \end{figure}
 
+Find the performance comparison in Table \ref{table3}
 \begin{table}[tbh]
-\caption{The performance comparison.}\label{table4} \centerline{
+\caption{The performance comparison.}\label{table3} \centerline{
     \begin{tabular}{clc}
     \hline\hline
     Approach & Dice coefficient\\
@@ -155,10 +116,12 @@ Dice Loss=1-\frac{2\sum_{pixels}(y_{true}*y_{pred})}{\sum_{pixels}(y_{true})+\su
     }
 \end{table}
 
-
 \subsection{Approach 2: Unet segmentation with Patch Pre-processing}
+we have small dataset with large image size 3100*3100 and it is measure region by region as well, so created path with size 200*200 , the training size is increased to 73152 from 508, so increased the batch size and reduced the epoch to speed up. we should train more, although the dice coeffient value increased but when look at some sample out, it is sparse 
+
+Find the (hyper)parameters in table \ref{table4}
 \begin{table}[tbh]
-\caption{The (hyper)parameters}\label{table5} \centerline{
+\caption{The (hyper)parameters}\label{table4} \centerline{
     \begin{tabular}{clc}
     \hline\hline
     train epochs & 16 \\\hline
@@ -167,18 +130,19 @@ Dice Loss=1-\frac{2\sum_{pixels}(y_{true}*y_{pred})}{\sum_{pixels}(y_{true})+\su
     \end{tabular}
     }
 \end{table}
-Dice coefficient is used as loss function and is provided in Equation \eqref{equation 3}
+Dice coefficient is used as loss function and is provided in Equation \eqref{equation 1}
+Find the result in Figure \ref{figure3}
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
         \includegraphics[width=4cm]{unet_patch_train_test.JPG}
         &\includegraphics[width=4cm]{unet_patch.png}\\
     (a) & (b)
     \end{tabular}}
-    \caption{Unet patch \label{figure4}}
+    \caption{Unet patch \label{figure3}}
 \end{figure}
-
+Find the performance comparison in table \ref{table5}
 \begin{table}[tbh]
-\caption{The performance comparison.}\label{table6} \centerline{
+\caption{The performance comparison.}\label{table5} \centerline{
     \begin{tabular}{clc}
     \hline\hline
     Approach & Dice coefficient\\
@@ -188,7 +152,7 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     }
 \end{table}
 
-\subsection{Approach 3: Unet segmentation by Increasing EPOCH}
+\subsection{Approach 3: Unet segmentation by Increasing Epoch}
 \begin{table}[tbh]
 \caption{The (hyper)parameters}\label{table7} \centerline{
     \begin{tabular}{clc}
@@ -199,16 +163,17 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     \end{tabular}
     }
 \end{table}
-Dice coefficient is used as loss function and is provided in Equation \eqref{equation 3}
+Dice coefficient is used as loss function and is provided in Equation \eqref{equation 1}
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
         \includegraphics[width=4cm]{unet_increase_epoch_train_test.JPG}
         &\includegraphics[width=4cm]{unet_increase_epoch.JPG}\\
     (a) & (b)
     \end{tabular}}
-    \caption{Unet with increased EPOCH \label{figure5}}
+    \caption{Unet with increased epoch \label{figure5}}
 \end{figure}
 
+The performance comparison 
 \begin{table}[tbh]
 \caption{The performance comparison.}\label{table8} \centerline{
     \begin{tabular}{clc}
@@ -216,12 +181,17 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     Approach & Dice coefficient\\
     Unet segmentation (Approach 1) & $0.7871$ \\\hline
     Unet patch (Approach 2) & $0.8281$ \\\hline
-    Unet increased EPOCH (Approach 3) & $0.7858$ \\\hline
+    Unet increased epoch (Approach 3) & $0.7858$ \\\hline
     \end{tabular}
     }
 \end{table}
 
 \subsection{Approach 4: Unet segmentation with HSV augmentation}
+1 HSV augmented image is generated from each original image, trained on top of pre-trained unet model in Approach 1 and HSV augmentation function is provided below , subscript i represents hue or saturation channel, \alpha is drawn from a uniform distribution [-1,1] \ref{equation 4}
+
+\begin{equation}\label{equation 4}
+S'_{i}=\alpha_{i}S_{i} 
+\end{equation}
 \begin{table}[tbh]
 \caption{The (hyper)parameters}\label{table9} \centerline{
     \begin{tabular}{clc}
@@ -232,7 +202,7 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     \end{tabular}
     }
 \end{table}
-Dice coefficient is used as loss function and is provided in Equation \eqref{equation 3}
+Dice coefficient is used as loss function and is provided in Equation \eqref{equation 1}
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
         \includegraphics[width=4cm]{unet_hsv_train_test.JPG}
@@ -249,13 +219,19 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     Approach & Dice coefficient\\
     Unet segmentation (Approach 1) & $0.7871$ \\\hline
     Unet patch (Approach 2) & $0.8281$ \\\hline
-    Unet increased EPOCH (Approach 3) & $0.7858$ \\\hline
+    Unet increased epoch (Approach 3) & $0.7858$ \\\hline
     Unet hsv (Approach 4) & $0.8398$ \\\hline
     \end{tabular}
     }
 \end{table}
 
 \subsection{Approach 5: Unet segmentation with HED augmentation}
+3 HED augmented images are generated from each original image, the training size is increased to 1289 from 508 and HED augmentation function is provided below in Equation \ref{equation 5} , subscript i represents each stain channel, \alpha is drawn from a uniform distribution U(1 − \alpha; 1 + \alpha), \beta is drawn
+from a uniform distribution U(−\alpha; \alpha), and typically \alpha = 0.05 
+
+\begin{equation}\label{equation 5}
+S'_{i}=\alpha_{i}S_{i}+\beta_{i} 
+\end{equation}
 \begin{table}[tbh]
 \caption{The (hyper)parameters}\label{table11} \centerline{
     \begin{tabular}{clc}
@@ -266,7 +242,8 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     \end{tabular}
     }
 \end{table}
-Dice coefficient is used as loss function and is provided in Equation \eqref{equation 3}
+Dice coefficient is used as loss function and is provided in Equation \eqref{equation 1} 
+
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
         \includegraphics[width=4cm]{unet_hed_train_test.JPG}
@@ -283,14 +260,16 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     Approach & Dice coefficient\\
     Unet segmentation (Approach 1) & $0.7871$ \\\hline
     Unet patch (Approach 2) & $0.8281$ \\\hline
-    Unet increased EPOCH (Approach 3) & $0.7858$ \\\hline
+    Unet increased epoch (Approach 3) & $0.7858$ \\\hline
     Unet hsv (Approach 4) & $0.8398$ \\\hline
     Unet hed (Approach 5) & $0.8398$ \\\hline
     \end{tabular}
     }
 \end{table}
 
-\subsection{Approach 6: Unet segmentation with }
+\subsection{Approach 6: Unet multi-class segmentation }
+try Multidimensional Dice coefficient since we have RGB masks 
+
 \begin{table}[tbh]
 \caption{The (hyper)parameters}\label{table11} \centerline{
     \begin{tabular}{clc}
@@ -301,14 +280,21 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     \end{tabular}
     }
 \end{table}
-Dice coefficient is used as loss function and is provided in Equation \eqref{equation 3}
+Multidimensional Dice coefficient is used as loss function and is provided in Figure \ref{figure7} 
+\begin{figure}[tbh]
+    \centerline{\begin{tabular}{c}
+        \includegraphics[width=8cm]{multidimensional-dice.JPG}
+    \end{tabular}}
+    \caption{Unet multi-class segmentation \label{figure7}}
+\end{figure}
+
 \begin{figure}[tbh]
     \centerline{\begin{tabular}{cc}
-        \includegraphics[width=4cm]{unet_hed_train_test.JPG}
-        &\includegraphics[width=4cm]{unet_hed.JPG}\\
+        \includegraphics[width=4cm]{unet_color_train_test.JPG}
+        &\includegraphics[width=4cm]{unet_color.JPG}\\
     (a) & (b)
     \end{tabular}}
-    \caption{Unet hed \label{figure7}}
+    \caption{Unet multi-class segmentation \label{figure8}}
 \end{figure}
 
 \begin{table}[tbh]
@@ -318,9 +304,91 @@ Dice coefficient is used as loss function and is provided in Equation \eqref{equ
     Approach & Dice coefficient\\
     Unet segmentation (Approach 1) & $0.7871$ \\\hline
     Unet patch (Approach 2) & $0.8281$ \\\hline
-    Unet increased EPOCH (Approach 3) & $0.7858$ \\\hline
+    Unet increased epoch (Approach 3) & $0.7858$ \\\hline
     Unet hsv (Approach 4) & $0.8398$ \\\hline
     Unet hed (Approach 5) & $0.8398$ \\\hline
+    Unet multi-class segmentation (Approach 6) & $0.5514$ \\\hline
+    \end{tabular}
+    }
+\end{table}
+
+\subsection{Approach 7: Unet multi-class HSV }
+try multi-class segmentation with HSV augmented data on top of pre-trained multi-class segmentation in Approach 6.
+
+\begin{table}[tbh]
+\caption{The (hyper)parameters}\label{table13} \centerline{
+    \begin{tabular}{clc}
+    \hline\hline
+    train epochs & 36 \\\hline
+    batch size & 8 \\\hline
+    decay & 1e-4 \\\hline
+    \end{tabular}
+    }
+\end{table}
+Multidimensional Dice coefficient is used as loss function and is provided in Figure \ref{figure7} 
+
+\begin{figure}[tbh]
+    \centerline{\begin{tabular}{cc}
+        \includegraphics[width=4cm]{unet_color_hsv_train_test.JPG}
+        &\includegraphics[width=4cm]{unet_color_hsv.JPG}\\
+    (a) & (b)
+    \end{tabular}}
+    \caption{Unet multi-class hsv \label{figure9}}
+\end{figure}
+
+\begin{table}[tbh]
+\caption{The performance comparison.}\label{table14} \centerline{
+    \begin{tabular}{clc}
+    \hline\hline
+    Approach & Dice coefficient\\
+    Unet segmentation (Approach 1) & $0.7871$ \\\hline
+    Unet patch (Approach 2) & $0.8281$ \\\hline
+    Unet increased epoch (Approach 3) & $0.7858$ \\\hline
+    Unet hsv (Approach 4) & $0.8398$ \\\hline
+    Unet hed (Approach 5) & $0.8398$ \\\hline
+    Unet multi-class segmentation (Approach 6) & $0.5514$ \\\hline
+    Unet multi-class HSV (Approach 7) & $0.7146$ \\\hline
+    \end{tabular}
+    }
+\end{table}
+
+\subsection{Approach 8: Unet multi-class HED }
+try multi-class segmentation with HED augmented data
+
+\begin{table}[tbh]
+\caption{The (hyper)parameters}\label{table15} \centerline{
+    \begin{tabular}{clc}
+    \hline\hline
+    train epochs & 36 \\\hline
+    batch size & 8 \\\hline
+    decay & 1e-4 \\\hline
+    \end{tabular}
+    }
+\end{table}
+Multidimensional Dice coefficient is used as loss function and is provided in Figure \ref{figure7} 
+
+\begin{figure}[tbh]
+    \centerline{\begin{tabular}{cc}
+        \includegraphics[width=4cm]{unet_color_hed_train_test.JPG}
+        &\includegraphics[width=4cm]{unet_color_hed.JPG}\\
+    (a) & (b)
+    \end{tabular}}
+    \caption{Unet multi-class hsv \label{figure10}}
+\end{figure}
+
+\begin{table}[tbh]
+\caption{The performance comparison.}\label{table16} \centerline{
+    \begin{tabular}{clc}
+    \hline\hline
+    Approach & Dice coefficient\\
+    Unet segmentation (Approach 1) & $0.7871$ \\\hline
+    Unet patch (Approach 2) & $0.8281$ \\\hline
+    Unet increased epoch (Approach 3) & $0.7858$ \\\hline
+    Unet hsv (Approach 4) & $0.8398$ \\\hline
+    Unet hed (Approach 5) & $0.8398$ \\\hline
+    Unet multi-class segmentation (Approach 6) & $0.5514$ \\\hline
+    Unet multi-class HSV (Approach 7) & $0.7146$ \\\hline
+    Unet multi-class HED (Approach 8) & $0.7978$ \\\hline
     \end{tabular}
     }
 \end{table}
