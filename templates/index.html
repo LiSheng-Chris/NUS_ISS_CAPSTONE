@@ -27,8 +27,16 @@
       </div>
       <div id="button" style="padding-top: 16px">
         <button type="button" class="button" onclick="segmentation()">
-          Submit
+          Segmentation
         </button>
+      </div>
+	  <div id="button" style="padding-top: 16px">
+        <button type="button" class="button" onclick="grading()">
+          Grading
+        </button>
+      </div>
+	  <div style="padding-top: 16px">
+        <label id="gradingresult"></label>
       </div>
       <div id="loader" style="padding-left: 48%; padding-top: 16px" hidden>
         <div class="loader"></div>
@@ -43,6 +51,8 @@
   var button = document.getElementById("button");
   var loader = document.getElementById("loader");
   var maskcolor = document.getElementsByName("maskcolor");
+  var gradingresult = document.getElementById("gradingresult");
+  var segFilePath;
 
   file.addEventListener("change", async function () {
     if (file.files.length > 0) {
@@ -69,13 +79,35 @@
 		break;
 	}
   }
-	
-	
+  
     const response = await fetch("/seg", {
       method: "POST",
       body: formData,
     });
     image.src = await response.text();
+	segFilePath=image.src;
+    loader.style.display = "none";
+    button.style.display = "block";
+  }
+  
+  
+  async function grading() {
+    button.style.display = "none";
+    loader.style.display = "block";
+	
+    const formData = new FormData();
+    formData.append("segfilepath", segFilePath);
+	filepath=file.value;
+	filename=filepath.substring(filepath.indexOf('fakepath\\')+'fakepath\\'.length)
+	filename=filename.substring(0,filename.indexOf('.'))
+	formData.append('fname',filename);
+  
+    const response2 = await fetch("/gra", {
+      method: "POST",
+      body: formData,
+    });
+    grade = await response2.text();
+	gradingresult.innerHTML="Gleason Grading : "+grade
     loader.style.display = "none";
     button.style.display = "block";
   }

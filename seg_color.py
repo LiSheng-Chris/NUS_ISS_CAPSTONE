@@ -11,6 +11,7 @@ from tensorflow.keras.applications import MobileNetV2
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau,ModelCheckpoint,CSVLogger
 from tensorflow.keras.metrics import Recall, Precision
 from tensorflow.keras import backend as K
+from PIL import Image
 
 IMAGE_SIZE = 256
 BATCH = 8
@@ -121,11 +122,17 @@ def run_seg(image_path):
     
     image_name = os.path.splitext(os.path.basename(image_path))[0]
     image_seg_path  = imgfolderpath+image_name+'_color_seg.png'
-
+   
     plt.switch_backend('Agg') 
     fig = plt.figure(figsize=(12, 12))
     a = fig.add_subplot(1, 1, 1)
     imgplot = plt.imshow(image_seg)
+    print("image_seg_path:"+image_seg_path)
     plt.savefig(image_seg_path)
+    
+    image_mask_path=imgfolderpath+'mask_'+image_name+'.png'
+    out_img=(y_pred * 255).astype(np.uint8)
+    im = Image.fromarray(out_img)
+    im.save(image_mask_path)
     
     return image_seg_path
