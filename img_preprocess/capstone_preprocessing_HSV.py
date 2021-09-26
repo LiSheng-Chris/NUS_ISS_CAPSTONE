@@ -26,7 +26,7 @@ np.random.seed(42)
 tf.random.set_seed(42)
 
 def create_HSV(image_path):
-  image_hsv_folder        = "./data/images_aug_hsv/"
+  image_hsv_folder        = "./data/images_test_aug_hsv/"
   plt.axis('off')
 
   image_name = os.path.splitext(os.path.basename(image_path))[0]
@@ -55,7 +55,7 @@ def create_HSV(image_path):
     im.save(image_HSV_path)
 
 import os
-rootdir = './data/images/'
+rootdir = './data/images_test/'
 
 for subdir, dirs, files in os.walk(rootdir):
     for file in files:

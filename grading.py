@@ -128,24 +128,21 @@ def pred(big_model,fname,image_file,seg_file):
     x_gleason_annot_patho2 = assign_group(a, b)
     x_gleason_cnn = gleason_summary_wsum(w_sum, thres=0.25)
     
-    # discard unused part of matrices
-    set_cnn = [x_gleason_cnn]
-    set_patho1 = [x_gleason_annot_patho1]
-    set_patho2 = [x_gleason_annot_patho2]
-
-    # compute kappa values
-    kappa_p1_p2 = cohen_kappa_score(set_patho1, set_patho2, weights='quadratic')
-    print('inter-pathologist: %.2f' % kappa_p1_p2)
-    kappa_p1 = cohen_kappa_score(set_patho1, set_cnn, weights='quadratic')
-    print('CNN-pathologist 1: %.2f' % kappa_p1)
-    kappa_p2 = cohen_kappa_score(set_patho2, set_cnn, weights='quadratic')
-    print('CNN-pathologist 2: %.2f' % kappa_p2)
+    print('x_gleason_annot_patho1: %.2f' % x_gleason_annot_patho1)
+    print('x_gleason_annot_patho2: %.2f' % x_gleason_annot_patho2)
+    print('x_gleason_cnn: %.2f' % x_gleason_cnn)
     
     return str(x_gleason_cnn)
 
 
 def run_pred(fname,seg_file):
-    model_weights = os.path.join(prefix,'model_weights/MobileNet_Gleason_weights.h5')
+    #model_weights = os.path.join(prefix,'model_weights/MobileNet_Gleason_weights.h5')
+    #model_weights = os.path.join(prefix,'model_weights/best_model_weights.h5')
+    #model_weights = os.path.join(prefix,'models/finetune_MobileNet_50/best_model_weights.h5')
+    #model_weights = os.path.join(prefix,'models/finetune_VGG16/best_model_weights.h5')
+    #model_weights = os.path.join(prefix,'models_aug/finetune_MobileNet_50/best_model_weights.h5')
+    model_weights = os.path.join(prefix,'models_aug/finetune_VGG16/best_model_weights.h5')
+    
     final_model=load_final_model(model_weights);
     #fname='ZT80_38_A_1_1'
     image_file = os.path.join(prefix,'dataset_TMA','TMA_images', fname+'.jpg')

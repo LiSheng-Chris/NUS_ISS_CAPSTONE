@@ -4,3 +4,4 @@ tensorflow
 matplotlib
 opencv-python
 Pillow
+keras==2.4.3
