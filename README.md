@@ -3,7 +3,7 @@
 ## SECTION 1 : PROJECT TITLE
 ## Intelligent Cancer Detection
 
-<img src="Miscellaneous/main.jpg"
+<img src="Miscellaneous/main.JPG"
      style="float: left; margin-right: 0px;" />
 
 ---
